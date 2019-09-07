@@ -1,4 +1,5 @@
 import React from 'react';
+import { isNumber } from 'util';
 
 const Header = ({title}) =>{
     //debugger
@@ -25,6 +26,19 @@ const Content = ({content}) => {
         />)
     )
 }
+
+const Total = ({ parts }) => {
+    //debugger
+    const total = parts.reduce((s, p) => {
+        console.log('what is happening', s, p)
+        //debugger
+        return { exercises: s.exercises + p.exercises }
+    })
+
+    return (
+        <span>total of  {total.exercises} exercises</span>
+    )
+}
   
 const Course = ({ course }) => {
     //debugger
@@ -32,6 +46,7 @@ const Course = ({ course }) => {
       <>
         <Header title={course.name} />
         <Content content={course.parts} />
+        <Total parts={course.parts} />
       </>
     )
 }
