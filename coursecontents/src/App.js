@@ -1,5 +1,4 @@
 import React from 'react';
-import { isNumber } from 'util';
 
 const Header = ({title}) =>{
     //debugger
@@ -7,11 +6,18 @@ const Header = ({title}) =>{
       <h1>{title}</h1>
     )
 }
+
+const CourseHeader = ({title}) =>{
+    //debugger
+    return (
+      <h2>{title}</h2>
+    )
+}
   
-const Part = ({ key, text, exercises }) => {
+const Part = ({text, exercises }) => {
     //debugger
     return(
-      <p key={key}>{text} {exercises}</p>
+      <p>{text} {exercises}</p>
     )
 }
   
@@ -30,8 +36,6 @@ const Content = ({content}) => {
 const Total = ({ parts }) => {
     //debugger
     const total = parts.reduce((s, p) => {
-        console.log('what is happening', s, p)
-        //debugger
         return { exercises: s.exercises + p.exercises }
     })
 
@@ -44,7 +48,7 @@ const Course = ({ course }) => {
     //debugger
     return (
       <>
-        <Header title={course.name} />
+        <CourseHeader title={course.name} />
         <Content content={course.parts} />
         <Total parts={course.parts} />
       </>
@@ -52,30 +56,55 @@ const Course = ({ course }) => {
 }
   
 const App = () => {
-    const course = {
-    name: 'Half Stack application development',
-    parts: [
+    const courses = [
         {
-        name: 'Fundamentals of React',
-        exercises: 10,
-        id: 1
-        },
+          name: 'Half Stack application development',
+          id: 1,
+          parts: [
+            {
+              name: 'Fundamentals of React',
+              exercises: 10,
+              id: 1
+            },
+            {
+              name: 'Using props to pass data',
+              exercises: 7,
+              id: 2
+            },
+            {
+              name: 'State of a component',
+              exercises: 14,
+              id: 3
+            },
+            {
+              name: 'Redux',
+              exercises: 11,
+              id: 4
+            }
+          ]
+        }, 
         {
-        name: 'Using props to pass data',
-        exercises: 7,
-        id: 2
-        },
-        {
-        name: 'State of a component',
-        exercises: 14,
-        id: 3
+          name: 'Node.js',
+          id: 2,
+          parts: [
+            {
+              name: 'Routing',
+              exercises: 3,
+              id: 1
+            },
+            {
+              name: 'Middlewares',
+              exercises: 7,
+              id: 2
+            }
+          ]
         }
     ]
-    }
-
+    
     return (
     <div>
-        <Course course={course} />
+        <Header title='Web development curriculum' />
+        {courses.map(course => <Course key={course.id} course={course} />)}
     </div>
     )
 }
