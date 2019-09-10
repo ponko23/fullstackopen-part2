@@ -10,7 +10,7 @@ const App = () => {
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ searchKey, setSearchKey ] = useState('')
-  const [ notification, setNotification] = useState(null)
+  const [ notification, setNotification] = useState({ status: null, message: null})
 
   useEffect(() => {
     personService
@@ -39,12 +39,12 @@ const App = () => {
 
   }
 
-  const notificationMessage = (message) => {
-    setNotification(message)
+  const notificationMessage = (status, message) => {
+    setNotification({status: status, message: message})
     setTimeout(() => {
-      setNotification(null)
+      setNotification({status: null, message: null})
     }, 5000)
-}
+  }
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -55,15 +55,18 @@ const App = () => {
         personService
           .update(target.id, {...target, number: newNumber})
           .then(returnedPerson => {
-            notificationMessage(`Updated ${returnedPerson.name}'s number ${target.number} -> ${returnedPerson.number}`)
+            notificationMessage("info", `Updated ${returnedPerson.name}'s number ${target.number} -> ${returnedPerson.number}`)
             setPersons(persons.map(person => person.id !== returnedPerson.id ? person : returnedPerson))
+          })
+          .catch((error) => {
+            notificationMessage("error", `Infomation of ${target.name} has already been removed from server`)
           })
       }
     } else {
       personService
         .create({ name: newName, number: newNumber})
         .then(returnedPerson => {
-          notificationMessage(`Added ${returnedPerson.name}`)
+          notificationMessage("info", `Added ${returnedPerson.name}`)
           setPersons(persons.concat(returnedPerson))
         })
       setNewName('')
